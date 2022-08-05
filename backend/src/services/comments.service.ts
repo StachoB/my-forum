@@ -9,24 +9,20 @@ export class CommentsService {
 
     constructor(@InjectModel('Comment') private readonly commentModel: Model<Comment>) { }
 
-    create(comment: Comment) {
-        this.comments.push(comment);
-    }
 
     async insertComment(text: string, user: string, post: string) {
         const newComment: Comment = new this.commentModel({ text: text, date: Date.now(), user: user, post: post });
         this.comments.push(newComment);
-        const result = await newComment.save();
+        await newComment.save();
     }
 
     async findAll() {
         const comments = await this.commentModel.find().exec();
-        console.log(comments);
         return comments;
     }
 
-    async findComsPubli(postId) {
-        const comments = await this.commentModel.find({ "post": postId });
+    async findComsPubli(publiId: string) {
+        const comments = await this.commentModel.find({ "post": publiId });
         console.log(comments);
         if (comments.length == 0) {
             return "aucun commentaires pour cette publication";
@@ -34,6 +30,10 @@ export class CommentsService {
         else {
             return comments;
         }
+    }
+
+    async deleteComsPubli(publiId: string) {
+        await this.commentModel.deleteMany({ "post": publiId }).exec()
     }
 
 

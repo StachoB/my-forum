@@ -18,7 +18,7 @@ export class CommentsController {
     @Get()
     async findAllComs() {
         const comments = await this.commentsService.findAll();
-        return comments
+        return comments;
     }
 
     @Get(':postId')
@@ -27,10 +27,10 @@ export class CommentsController {
         return comments
     }
 
-    @Delete()
-    async deleteCom() {
-
+    //a utiliser si je décide de faire en deux étapes
+    @Delete(':publiId')
+    async deleteCom(@Param() params) {
+        await this.commentsService.deleteComsPubli(params.publiId)
     }
-
 
 }

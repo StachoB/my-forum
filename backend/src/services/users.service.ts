@@ -12,26 +12,14 @@ export class UsersService {
 
     constructor(@InjectModel('User') private readonly userModel: Model<User>) { }
 
-    /*create(createUserDto: CreateUserDto) {
-        let newUser: User;
-        newUser.username = createUserDto.username;
-        newUser.password = createUserDto.password;
-        console.log(createUserDto.username);
-        this.users.push(newUser);
-        this.insertUser(newUser.username, newUser.password);
-        this.insertUser(createUserDto.username, createUserDto.password);
-    }*/
-
     async insertUser(username: string, password: string) {
         const newUser: User = new this.userModel({ username: username, password: password });
-        //console.log('the new user is ', newUser);
         this.users.push(newUser);
-        const result = await newUser.save();
+        await newUser.save();
     }
 
     async findAll() {
         const users: User[] = await this.userModel.find().exec();
-        console.log(users);
         return users;
     }
 
@@ -49,6 +37,24 @@ export class UsersService {
         return user;
     }
 
+    async findOneByUsername(username: string): Promise<User> {
+        let user: User;
+        try {
+            user = await this.userModel.findOne({ "username": username });
+        }
+        catch (error) {
+            throw new NotFoundException('Could not find user');
+        }
+        if (!user) {
+            throw new NotFoundException('Could not find user');
+        }
+        return user;
+    }
+
+
+
+
+    /*
     async updateOne(username: string, toUpdateUser: User) {
         const updatedUser: User = await this.findOne(username);
         if (toUpdateUser.username) {
@@ -59,11 +65,8 @@ export class UsersService {
         }
         updatedUser.save();
         return updatedUser;
-    }
+    }*/
 
-    async deleteOne(id: string) {
-        await this.userModel.deleteOne({ "_id": id }).exec()
-    }
 
 
 }

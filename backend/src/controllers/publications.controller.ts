@@ -11,8 +11,7 @@ export class PublicationsController {
     //poster une publication
     @Post()
     create(@Body() createPublicationDto: CreatePublicationDto) {
-        const newpublication = this.publicationsService.insertPubli(createPublicationDto.title, createPublicationDto.text, createPublicationDto.user);
-        return newpublication;
+        this.publicationsService.insertPubli(createPublicationDto.title, createPublicationDto.text, createPublicationDto.user);
     }
 
     //obtenir toutes les publications
@@ -23,7 +22,7 @@ export class PublicationsController {
     }
 
     //supp une publication qui nous appartient
-    @Delete(':id')
+    @Delete(':pub_id')
     async deletePubli(@Param() params) {
         await this.publicationsService.deleteOnePubli(params.id)
     }

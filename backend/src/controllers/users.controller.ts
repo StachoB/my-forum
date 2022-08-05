@@ -11,7 +11,6 @@ export class UsersController {
     //ajouter un utilisateur
     @Post()
     create(@Body() createUserDto: CreateUserDto) {
-        console.log('nouvel utilisateur', CreateUserDto);
         this.usersService.insertUser(createUserDto.username, createUserDto.password);
     }
 
@@ -28,6 +27,7 @@ export class UsersController {
         return user
     }
 
+    /*
     //pas utilisé ici
     @Patch(':id')
     async updateUser(@Param() params, @Body() changedUser) {
@@ -39,6 +39,6 @@ export class UsersController {
     @Delete(':id')
     async deleteUser(@Param() params) {
         await this.usersService.deleteOne(params.id)
-    }
+    }*/
 
 }

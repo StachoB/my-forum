@@ -40,6 +40,7 @@ export const userEndpoints = baseApi.injectEndpoints({
         method: "POST",
         data: { username, password },
       }),
+      invalidatesTags: ["Users"],
     }),
 
     getProfile: builder.query<{ userId: string; username: string }, {}>({
@@ -48,6 +49,7 @@ export const userEndpoints = baseApi.injectEndpoints({
         method: "GET",
         data: {},
       }),
+      providesTags: ["Users"],
     }),
 
     getUserId: builder.mutation<{ userId: string; username: string }, {}>({

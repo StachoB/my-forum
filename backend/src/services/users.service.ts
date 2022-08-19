@@ -7,54 +7,95 @@ import { stringify } from 'querystring';
 
 @Injectable()
 export class UsersService {
-    users: User[] = [];
+  users: User[] = [];
 
+  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
-    constructor(@InjectModel('User') private readonly userModel: Model<User>) { }
-
-    async insertUser(username: string, password: string) {
-        const newUser: User = new this.userModel({ username: username, password: password });
-        this.users.push(newUser);
-        await newUser.save();
+  async insertUser(username: string, password: string): Promise<boolean> {
+    const user: User = await this.userModel.findOne({ username: username });
+    if (!user) {
+      const newUser: User = new this.userModel({
+        username: username,
+        password: password,
+      });
+      this.users.push(newUser);
+      await newUser.save();
+      return true;
+    } else {
+      throw new Error('Username already taken by another account.');
     }
+  }
 
-    async findAll() {
-        const users: User[] = await this.userModel.find().exec();
-        return users;
+  async findAll() {
+    const users: User[] = await this.userModel.find().exec();
+    return users;
+  }
+
+  async findOne(id: string): Promise<User> {
+    let user: User;
+    try {
+      user = await this.userModel.findById(id);
+    } catch (error) {
+      throw new NotFoundException('Could not find user');
     }
-
-    async findOne(id: string): Promise<User> {
-        let user: User;
-        try {
-            user = await this.userModel.findById(id);
-        }
-        catch (error) {
-            throw new NotFoundException('Could not find user');
-        }
-        if (!user) {
-            throw new NotFoundException('Could not find user');
-        }
-        return user;
+    if (!user) {
+      throw new NotFoundException('Could not find user');
     }
+    return user;
+  }
 
-    async findOneByUsername(username: string): Promise<User> {
-        let user: User;
-        try {
-            user = await this.userModel.findOne({ "username": username });
-        }
-        catch (error) {
-            throw new NotFoundException('Could not find user');
-        }
-        if (!user) {
-            throw new NotFoundException('Could not find user');
-        }
-        return user;
+  async getUsername(userId: string): Promise<string> {
+    let user: User;
+    try {
+      user = await this.userModel.findById(userId);
+    } catch (error) {
+      throw new NotFoundException('Could not find user');
     }
+    if (!user) {
+      throw new NotFoundException('Could not find user');
+    }
+    return user.username;
+  }
 
+  async findOneByUsername(username: string): Promise<User> {
+    let user: User;
+    try {
+      user = await this.userModel.findOne({ username: username });
+    } catch (error) {
+      throw new NotFoundException('Could not find user');
+    }
+    if (!user) {
+      throw new NotFoundException('Could not find user');
+    }
+    return user;
+  }
 
+  async findOneAuth(username: string, password: string): Promise<boolean> {
+    let user: User;
+    try {
+      user = await this.userModel.findOne({ username: username });
+    } catch (error) {
+      throw new NotFoundException('Could not find user');
+    }
+    if (!user) {
+      throw new NotFoundException('No existing account with this username.');
+    } else {
+      try {
+        user = await this.userModel.findOne({
+          username: username,
+          password: password,
+        });
+      } catch (error) {
+        throw new NotFoundException('Could not find user');
+      }
+      if (!user) {
+        throw new NotFoundException('Could not find user');
+      }
+      return true;
+    }
+  }
 
-
-    /*
+  /*
     async updateOne(username: string, toUpdateUser: User) {
         const updatedUser: User = await this.findOne(username);
         if (toUpdateUser.username) {
@@ -66,7 +107,4 @@ export class UsersService {
         updatedUser.save();
         return updatedUser;
     }*/
-
-
-
 }

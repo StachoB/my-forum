@@ -11,16 +11,11 @@ export class AppController {
   constructor(private authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
-  @Post('auth/login')
+  @Post('/login')
   async login(@Request() req) {
     const user = await this.authService.findUser(req.user);
     return this.authService.login(req.user.username, req.user.id);
   }
-  /*
-    @Get()
-    getHello(): string {
-      return this.appService.getHello();
-    }*/
 
   //@UseGuards(AuthGuard('jwt'))
   @UseGuards(JwtAuthGuard)

@@ -1,8 +1,16 @@
-import { combineReducers } from "@reduxjs/toolkit"
-import { userSlice } from '../slices/user'
+import { combineReducers } from "@reduxjs/toolkit";
+import { baseApi } from "../rtk/base";
+import { commentsEndpoints } from "../rtk/comments";
+import { publicationEndpoints } from "../rtk/publications";
+import { userEndpoints } from "../rtk/user";
+import { userSlice } from "../slices/user";
 
 const rootReducer = combineReducers({
-    [userSlice.name]: userSlice.reducer,
-})
+  [userSlice.name]: userSlice.reducer,
+  [baseApi.reducerPath]: baseApi.reducer,
+  [userEndpoints.reducerPath]: userEndpoints.reducer,
+  [publicationEndpoints.reducerPath]: publicationEndpoints.reducer,
+  [commentsEndpoints.reducerPath]: commentsEndpoints.reducer,
+});
 
-export default rootReducer
+export default rootReducer;

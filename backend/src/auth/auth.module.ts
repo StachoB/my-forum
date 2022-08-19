@@ -14,18 +14,12 @@ import { LocalStrategy } from './local.strategy';
   imports: [
     PassportModule,
     JwtModule.register({
-      secret: 'secretKey',
-      signOptions: { expiresIn: '300s' },
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '1000s' },
     }),
     MongooseModule.forFeature([{ name: 'User', schema: UsersSchema }]),
   ],
-  providers: [
-    AuthService,
-    LocalStrategy,
-    UsersService,
-    JwtStrategy,
-    JwtStrategy,
-  ],
+  providers: [AuthService, LocalStrategy, UsersService, JwtStrategy],
   exports: [AuthService, JwtStrategy],
 })
 export class AuthModule {}

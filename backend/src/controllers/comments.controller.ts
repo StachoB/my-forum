@@ -1,36 +1,49 @@
-import { Body, Controller, Delete, Get, Param, ParseFileOptions, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateCommentDto } from 'src/dto/create-comment.dto';
 import { CommentsService } from '../services/comments.service';
 
 @Controller('comments')
 export class CommentsController {
-    constructor(private commentsService: CommentsService) {
+  constructor(private commentsService: CommentsService) {}
 
-    }
+  //create a comment
+  @UseGuards(JwtAuthGuard)
+  @Post()
+  create(@Body() createCommentDto: CreateCommentDto) {
+    this.commentsService.insertComment(
+      createCommentDto.text,
+      createCommentDto.user,
+      createCommentDto.post,
+    );
+    return 'ok';
+  }
 
-    //creer un commentaire
-    @Post()
-    create(@Body() createCommentDto: CreateCommentDto) {
-        this.commentsService.insertComment(createCommentDto.text, createCommentDto.user, createCommentDto.post)
-    }
+  //get all comments
+  @Get()
+  async findAllComs() {
+    const comments = await this.commentsService.findAll();
+    return comments;
+  }
 
-    //obtenir toutes les commentaires
-    @Get()
-    async findAllComs() {
-        const comments = await this.commentsService.findAll();
-        return comments;
-    }
+  @Get(':postId')
+  async findComsPubli(@Param() params) {
+    const comments = await this.commentsService.findComsPubli(params.postId);
+    return comments;
+  }
 
-    @Get(':postId')
-    async findComsPubli(@Param() params) {
-        const comments = await this.commentsService.findComsPubli(params.postId);
-        return comments
-    }
-
-    //a utiliser si je décide de faire en deux étapes
-    @Delete(':publiId')
-    async deleteCom(@Param() params) {
-        await this.commentsService.deleteComsPubli(params.publiId)
-    }
-
+  @UseGuards(JwtAuthGuard)
+  @Delete(':comId')
+  async deleteCom(@Param() params) {
+    await this.commentsService.deleteCom(params.comId);
+    return 'ok';
+  }
 }

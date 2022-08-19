@@ -3,15 +3,118 @@
 @tailwind utilities;
 
 body {
-  margin: 0;
+  margin: 50px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-top: 60px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.containerPost {
+  background-color: rgba(235, 236, 240, 0.6); 
+  text-align: left;
+  margin: 40px;
+  padding: 20px;
+}
+.containerComment{
+  text-align: left;
+  margin: 20px;
+  padding: 10px;
+  background-color: rgb(255, 255, 255, 0.7);
+}
+nav{
+  background-color: #FFD1DC;
+  cursor: pointer;
+}
+
+h1{
+  font-size: 25px;
+  font-weight: bold;
+  margin: 20px;
+}
+
+.containerFormItem{
+  margin: 30px;
+}
+
+input{
+  margin : 10px;
+  padding : 3px;
+  border-color: black;
+  border-width: 1px;
+}
+
+.btn{
+  border-width: 2px;
+  margin : 5px;
+}
+
+.title{
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.postcomContent{
+  margin: 10px;
+}
+
+.alert-container {
+  padding-top: 50px;
+  position: absolute;
+  top: 2rem;
+  left: 0;
+  right: 0;
+
+}
+
+.alert-inner {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: white;
+  box-shadow: 1px 2px 10px -3px rgb(0 0 0 / 70%);
+  -webkit-box-shadow: 1px 2px 10px -3px rgb(0 0 0 / 70%);
+  -moz-box-shadow: 1px 2px 10px -3px rgb(0 0 0 / 70%);
+
+}
+
+.alert-failed{
+  background-color: #f37e7e;
+}
+
+.alert-success{
+background-color: rgb(58, 172, 58);
+}
+
+a{
+  text-decoration: underline;
+}
+
+a:hover{
+  color: #FFD1DC;
+}
+
+.accountLogged{
+  color : white;
+  font-weight: bold;
+}
+
+.btnGroup{
+  position: relative;
+  align-items: center;
+}
+
+.textBox{
+  height:150px;
+}
+
+.lighterText{
+  font-weight: lighter;
+}
+
+.btn-success{
+  background-color: rgb(58, 172, 58);
+  border-width: 2px;
+  border-color: rgb(58, 172, 58);
 }

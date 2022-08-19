@@ -7,9 +7,7 @@ import Publi from './publications';
 import SuppressPubli from './suppressPubli';
 
 function Home() {
- //const {data} = useGetAllPubliQuery({});
- //const {data: res} = usePostPubliQuery({title : "le titre sympa",text :"le texte de la publication", user :"62eb86204560153b07feba6c"})
- //const {data: res2} = useDeletePubliQuery({publiId : "62f2668acfb924eb7054d6ea"})
+
  function GoToPostPubli() {
   history.push("/postPubli");
 }

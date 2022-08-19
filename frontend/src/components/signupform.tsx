@@ -26,10 +26,6 @@ const initialValues = {
   confirmPassword:"",
 };
 
-// const handleSubmit = (values: { username: string; password: string;}) => {
-//   console.log(values)
-// };
-
 const SignUpForm = () => {
 
   const navigate = useNavigate();

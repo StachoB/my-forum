@@ -14,11 +14,9 @@ import { Provider } from "react-redux";
 ReactDOM.render(
   <React.StrictMode>
   <Provider store={store}>
-  {/* <BrowserRouter> */}
   <HistoryRouter history={history}>
   <App />
   </HistoryRouter>
-  {/* </BrowserRouter> */}
   </Provider></React.StrictMode>,
   document.getElementById("root")
 );

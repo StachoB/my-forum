@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import {loginUser} from 'src/store/slices/user';
 import store from 'src/store';
 import NavBar from './navBar';
-import { findAncestor } from 'typescript';
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()

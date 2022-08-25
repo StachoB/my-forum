@@ -3,6 +3,7 @@ import { baseApi } from "./base";
 
 export const commentsEndpoints = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    //post a comment
     postCom: builder.mutation<
       void,
       {
@@ -18,6 +19,7 @@ export const commentsEndpoints = baseApi.injectEndpoints({
       invalidatesTags: ["Comments"],
     }),
 
+    //delete a comment
     deleteCom: builder.mutation<void, { comId: string }>({
       query: ({ comId }) => ({
         url: `comments/${comId}`,
@@ -27,6 +29,7 @@ export const commentsEndpoints = baseApi.injectEndpoints({
       invalidatesTags: ["Comments"],
     }),
 
+    //get all comments form one publication
     getComPubli: builder.query<CommentType[], { publiId: string }>({
       query: ({ publiId }) => ({
         url: `comments/${publiId}`,

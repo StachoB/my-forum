@@ -2,6 +2,7 @@ import { baseApi } from "./base";
 
 export const userEndpoints = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    //sign up a user
     postUser: builder.mutation<boolean, { username: string; password: string }>(
       {
         query: ({ username, password }) => ({
@@ -12,6 +13,7 @@ export const userEndpoints = baseApi.injectEndpoints({
       }
     ),
 
+    //get username from id of user
     getUserById: builder.query<string, { userId: string }>({
       query: ({ userId }) => ({
         url: `users/${userId}`,
@@ -20,6 +22,7 @@ export const userEndpoints = baseApi.injectEndpoints({
       }),
     }),
 
+    //know if user+password exists
     getUser: builder.mutation<boolean, { username: string; password: string }>({
       query: ({ username, password }) => ({
         url: "users/auth",
@@ -29,6 +32,7 @@ export const userEndpoints = baseApi.injectEndpoints({
       invalidatesTags: ["Users", "Likes"],
     }),
 
+    //get id and username of current user
     getProfile: builder.query<{ userId: string; username: string }, {}>({
       query: () => ({
         url: "profile",

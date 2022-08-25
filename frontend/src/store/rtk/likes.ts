@@ -2,6 +2,7 @@ import { baseApi } from "./base";
 
 export const likesEndpoints = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    //post a like
     postLike: builder.mutation<void, { post: string }>({
       query: ({ post }) => ({
         url: "likes",
@@ -11,6 +12,7 @@ export const likesEndpoints = baseApi.injectEndpoints({
       invalidatesTags: ["Likes"],
     }),
 
+    //get total of likes of one publication
     getNumberLikesPubli: builder.query<
       {
         numLikes: number;
@@ -25,6 +27,7 @@ export const likesEndpoints = baseApi.injectEndpoints({
       providesTags: ["Likes"],
     }),
 
+    //know if a publication is liked by current user or not
     getIsPubliLiked: builder.query<number, { publiId: string }>({
       query: ({ publiId }) => ({
         url: `/likes/${publiId}/isLiked`,
@@ -34,6 +37,7 @@ export const likesEndpoints = baseApi.injectEndpoints({
       providesTags: ["Likes"],
     }),
 
+    //get total of likes of current user
     getTotalLikes: builder.query<number, void>({
       query: () => ({
         url: "likes/numberLikes/total",
@@ -43,6 +47,7 @@ export const likesEndpoints = baseApi.injectEndpoints({
       providesTags: ["Likes"],
     }),
 
+    //get last week likes of current user
     getLastWeekLikes: builder.query<number, void>({
       query: () => ({
         url: "likes/numberLikes/lastWeek",

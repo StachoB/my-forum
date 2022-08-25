@@ -9,6 +9,7 @@ import { UsersService } from '../services/users.service';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  @Public()
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const canBeCreated: boolean = await this.usersService.insertUser(
@@ -18,6 +19,7 @@ export class UsersController {
     return canBeCreated;
   }
 
+  @Public()
   @Get()
   async findAllUsers() {
     let users = await this.usersService.findAll();
@@ -31,6 +33,7 @@ export class UsersController {
     return finalUsers;
   }
 
+  @Public()
   @Post('auth')
   async findOneAuth(@Body() createUserDto: CreateUserDto) {
     const found: boolean = await this.usersService.findOneAuth(
@@ -40,11 +43,13 @@ export class UsersController {
     return found;
   }
 
+  @Public()
   @Get(':id')
   async findOneUser(@Param() params) {
     return await this.usersService.getUsername(params.id);
   }
 
+  @Public()
   @Get('username/:username')
   async findOneUserWithUsername(@Param() params) {
     return await this.usersService.findOneByUsername(params.username);

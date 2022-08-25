@@ -47,6 +47,10 @@ import { APP_GUARD } from '@nestjs/core';
     UsersService,
     CommentsService,
     LikesService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
 })
 export class AppModule {}

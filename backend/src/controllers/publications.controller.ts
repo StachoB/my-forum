@@ -25,7 +25,6 @@ export class PublicationsController {
     private likesService: LikesService,
   ) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Request() req, @Body() createPublicationDto: CreatePublicationDto) {
     this.publicationsService.insertPubli(
@@ -35,17 +34,18 @@ export class PublicationsController {
     );
   }
 
+  @Public()
   @Get(':id')
   async findOnePubli(@Param() params) {
     return await this.publicationsService.findOne(params.id);
   }
 
+  @Public()
   @Get()
   async findAllPubli() {
     return await this.publicationsService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Delete(':pub_id')
   async deletePubli(@Request() req, @Param() params) {
     const authorized = await this.publicationsService.deleteOnePubli(
@@ -58,19 +58,16 @@ export class PublicationsController {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('/analytics/pieChartData')
   async findPieChartData() {
     return await this.publicationsService.findDataPieChart();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('/analytics/nbPubli')
   async findNumberPubliUser(@Request() req) {
     return await this.publicationsService.countUserPubli(req.user.userId);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('/analytics/nbPubli/lastWeek')
   async findNumberPubliUserLastWeek(@Request() req) {
     return await this.publicationsService.countUserPubliLastWeek(

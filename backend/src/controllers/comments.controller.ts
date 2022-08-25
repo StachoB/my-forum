@@ -17,7 +17,6 @@ import { CommentsService } from '../services/comments.service';
 export class CommentsController {
   constructor(private commentsService: CommentsService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Request() req, @Body() createCommentDto: CreateCommentDto) {
     this.commentsService.insertComment(
@@ -27,17 +26,18 @@ export class CommentsController {
     );
   }
 
+  @Public()
   @Get()
   async findAllComs() {
     return await this.commentsService.findAll();
   }
 
+  @Public()
   @Get(':postId')
   async findComsPubli(@Param() params) {
     return await this.commentsService.findComsPubli(params.postId);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Delete(':comId')
   async deleteCom(@Request() req, @Param() params) {
     await this.commentsService.deleteCom(params.comId, req.user.userId);

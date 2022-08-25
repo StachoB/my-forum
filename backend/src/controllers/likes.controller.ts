@@ -17,7 +17,6 @@ import { PublicationsService } from 'src/services/publications.service';
 export class LikesController {
   constructor(private likesService: LikesService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Request() req, @Body() createLikeDto: CreateLikeDto) {
     const isLiked = await this.likesService.isPostLiked(
@@ -31,24 +30,22 @@ export class LikesController {
     }
   }
 
+  @Public()
   @Get('/:pub_id')
   async findLikesPubli(@Param() params) {
     return await this.likesService.findLikesPubli(params.pub_id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('/:pub_id/isLiked')
   async isPostLiked(@Request() req, @Param() params) {
     return await this.likesService.isPostLiked(params.pub_id, req.user.userId);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('/numberLikes/total')
   async findTotalLikes(@Request() req) {
     return await this.likesService.findTotalLikesUser(req.user.userId);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('/numberLikes/lastWeek')
   async findLastWeekLikes(@Request() req) {
     return await this.likesService.findTotalLikesUserLastWeek(req.user.userId);

@@ -102,15 +102,36 @@ export class PublicationsService {
           total_posts: { $sum: 1 },
         },
       },
+      {
+        $lookup: {
+          from: 'users',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $set: {
+          _id: { $arrayElemAt: ['$user', 0] },
+        },
+      },
+      {
+        $set: {
+          _id: '$_id.username',
+        },
+      },
+      {
+        $unset: 'user',
+      },
     ];
-    const usersPubli: { _id: string; total_posts: number }[] =
-      await this.publicationModel.aggregate(pipeline).exec();
+    const usersPubli: { _id; total_posts }[] = await this.publicationModel
+      .aggregate(pipeline)
+      .exec();
     let data: (string | number)[][] = [];
     data.push(['User', 'Number of posts published']);
     await Promise.all(
       usersPubli.map(async (userPubli) => {
-        const username = await this.userService.getUsername(userPubli._id);
-        data.push([username, userPubli.total_posts]);
+        data.push(Object.values(userPubli));
       }),
     );
     return data;

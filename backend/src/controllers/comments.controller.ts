@@ -6,8 +6,10 @@ import {
   Param,
   Post,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Public } from 'src/auth/public.guard';
 import { CreateCommentDto } from 'src/dto/create-comment.dto';
 import { CommentsService } from '../services/comments.service';
 
@@ -15,35 +17,29 @@ import { CommentsService } from '../services/comments.service';
 export class CommentsController {
   constructor(private commentsService: CommentsService) {}
 
-  //create a comment
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createCommentDto: CreateCommentDto) {
+  create(@Request() req, @Body() createCommentDto: CreateCommentDto) {
     this.commentsService.insertComment(
       createCommentDto.text,
-      createCommentDto.user,
+      req.user.userId,
       createCommentDto.post,
     );
-    return 'ok';
   }
 
-  //get all comments
   @Get()
   async findAllComs() {
-    const comments = await this.commentsService.findAll();
-    return comments;
+    return await this.commentsService.findAll();
   }
 
   @Get(':postId')
   async findComsPubli(@Param() params) {
-    const comments = await this.commentsService.findComsPubli(params.postId);
-    return comments;
+    return await this.commentsService.findComsPubli(params.postId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':comId')
-  async deleteCom(@Param() params) {
-    await this.commentsService.deleteCom(params.comId);
-    return 'ok';
+  async deleteCom(@Request() req, @Param() params) {
+    await this.commentsService.deleteCom(params.comId, req.user.userId);
   }
 }

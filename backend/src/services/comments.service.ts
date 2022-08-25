@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Comment } from '../models/comments/comment.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -12,7 +12,7 @@ export class CommentsService {
   ) {}
 
   async insertComment(text: string, user: string, post: string) {
-    const newComment: Comment = new this.commentModel({
+    const newComment = new this.commentModel({
       text: text,
       date: Date.now(),
       user: user,
@@ -28,19 +28,21 @@ export class CommentsService {
   }
 
   async findComsPubli(publiId: string) {
-    const comments = await this.commentModel.find({ post: publiId });
-    if (comments.length == 0) {
-      return 'aucun commentaires pour cette publication';
-    } else {
-      return comments;
-    }
+    return await this.commentModel.find({ post: publiId });
   }
 
   async deleteComsPubli(publiId: string) {
     await this.commentModel.deleteMany({ post: publiId }).exec();
   }
 
-  async deleteCom(comId: string) {
-    await this.commentModel.deleteOne({ _id: comId }).exec();
+  async deleteCom(comId: string, userId: string) {
+    const comment = await this.commentModel
+      .find({ _id: comId, user: userId })
+      .exec();
+    if (!comment) {
+      throw new UnauthorizedException('Unauthorized');
+    } else {
+      await this.commentModel.deleteOne({ _id: comId }).exec();
+    }
   }
 }

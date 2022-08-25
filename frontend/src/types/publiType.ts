@@ -1,5 +1,5 @@
 export type PubliType = {
-  id: string;
+  _id: string;
   title: string;
   text: string;
   date: string;

@@ -3,16 +3,7 @@ import { baseApi } from "./base";
 
 export const publicationEndpoints = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllPubli: builder.query<
-      {
-        _id: string;
-        title: string;
-        text: string;
-        date: string;
-        user: string;
-      }[],
-      {}
-    >({
+    getAllPubli: builder.query<PubliType[], {}>({
       query: () => ({
         url: "publications",
         method: "GET",
@@ -21,42 +12,57 @@ export const publicationEndpoints = baseApi.injectEndpoints({
       providesTags: ["Posts"],
     }),
 
-    postPubli: builder.mutation<
-      any,
-      { title: string; text: string; user: string }
-    >({
-      query: ({ title, text, user }) => ({
+    postPubli: builder.mutation<void, { title: string; text: string }>({
+      query: ({ title, text }) => ({
         url: "publications",
         method: "POST",
-        data: { title, text, user },
+        data: { title, text },
       }),
       invalidatesTags: ["Posts"],
     }),
 
-    deletePubli: builder.mutation<any, { publiId: string }>({
+    deletePubli: builder.mutation<void, { publiId: string }>({
       query: ({ publiId }) => ({
         url: `/publications/${publiId}`,
         method: "DELETE",
         data: {},
       }),
-      invalidatesTags: ["Posts"],
+      invalidatesTags: ["Posts", "Likes"],
     }),
 
-    getOnePubli: builder.query<
-      {
-        _id: string;
-        title: string;
-        text: string;
-        date: string;
-        user: string;
-      },
-      { publiId: string }
-    >({
+    getOnePubli: builder.query<PubliType, { publiId: string }>({
       query: ({ publiId }) => ({
         url: `/publications/${publiId}`,
         method: "GET",
         data: { publiId },
       }),
+    }),
+
+    getNumberPubliUser: builder.query<number, void>({
+      query: () => ({
+        url: "/publications/analytics/nbPubli",
+        method: "GET",
+        data: {},
+      }),
+      providesTags: ["Posts"],
+    }),
+
+    getNumberPubliUserLastWeek: builder.query<number, void>({
+      query: () => ({
+        url: "/publications/analytics/nbPubli/lastWeek",
+        method: "GET",
+        data: {},
+      }),
+      providesTags: ["Posts"],
+    }),
+
+    getPieChartData: builder.query<(string | number)[][], void>({
+      query: () => ({
+        url: "publications/analytics/pieChartData",
+        method: "GET",
+        data: {},
+      }),
+      providesTags: ["Users", "Posts"],
     }),
   }),
 });
@@ -66,4 +72,7 @@ export const {
   usePostPubliMutation,
   useDeletePubliMutation,
   useGetOnePubliQuery,
+  useGetNumberPubliUserQuery,
+  useGetNumberPubliUserLastWeekQuery,
+  useGetPieChartDataQuery,
 } = publicationEndpoints;

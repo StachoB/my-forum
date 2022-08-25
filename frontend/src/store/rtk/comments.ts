@@ -1,41 +1,24 @@
+import { CommentType } from "src/types/commentType";
 import { baseApi } from "./base";
 
 export const commentsEndpoints = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllCom: builder.query<
-      {
-        _id: string;
-        text: string;
-        date: string;
-        user: string;
-        post: string;
-      }[],
-      {}
-    >({
-      query: () => ({
-        url: "comments",
-        method: "GET",
-        data: {},
-      }),
-    }),
-
     postCom: builder.mutation<
-      {},
+      void,
       {
         text: string;
-        user: string;
         post: string;
       }
     >({
-      query: ({ text, user, post }) => ({
+      query: ({ text, post }) => ({
         url: "comments",
         method: "POST",
-        data: { text, user, post },
+        data: { text, post },
       }),
       invalidatesTags: ["Comments"],
     }),
 
-    deleteCom: builder.mutation<{}, { comId: string }>({
+    deleteCom: builder.mutation<void, { comId: string }>({
       query: ({ comId }) => ({
         url: `comments/${comId}`,
         method: "DELETE",
@@ -44,16 +27,7 @@ export const commentsEndpoints = baseApi.injectEndpoints({
       invalidatesTags: ["Comments"],
     }),
 
-    getComPubli: builder.query<
-      {
-        _id: string;
-        text: string;
-        date: string;
-        user: string;
-        post: string;
-      }[],
-      { publiId: string }
-    >({
+    getComPubli: builder.query<CommentType[], { publiId: string }>({
       query: ({ publiId }) => ({
         url: `comments/${publiId}`,
         method: "GET",
@@ -64,9 +38,5 @@ export const commentsEndpoints = baseApi.injectEndpoints({
   }),
 });
 
-export const {
-  useGetAllComQuery,
-  usePostComMutation,
-  useDeleteComMutation,
-  useGetComPubliQuery,
-} = commentsEndpoints;
+export const { usePostComMutation, useDeleteComMutation, useGetComPubliQuery } =
+  commentsEndpoints;

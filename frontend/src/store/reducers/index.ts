@@ -8,9 +8,6 @@ import { userSlice } from "../slices/user";
 const rootReducer = combineReducers({
   [userSlice.name]: userSlice.reducer,
   [baseApi.reducerPath]: baseApi.reducer,
-  [userEndpoints.reducerPath]: userEndpoints.reducer,
-  [publicationEndpoints.reducerPath]: publicationEndpoints.reducer,
-  [commentsEndpoints.reducerPath]: commentsEndpoints.reducer,
 });
 
 export default rootReducer;

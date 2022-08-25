@@ -2,20 +2,6 @@ import { baseApi } from "./base";
 
 export const userEndpoints = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllUsers: builder.query<
-      {
-        username: string;
-        password: string;
-      },
-      {}
-    >({
-      query: () => ({
-        url: "users",
-        method: "GET",
-        data: {},
-      }),
-    }),
-
     postUser: builder.mutation<boolean, { username: string; password: string }>(
       {
         query: ({ username, password }) => ({
@@ -34,13 +20,13 @@ export const userEndpoints = baseApi.injectEndpoints({
       }),
     }),
 
-    getUser: builder.mutation<any, { username: string; password: string }>({
+    getUser: builder.mutation<boolean, { username: string; password: string }>({
       query: ({ username, password }) => ({
         url: "users/auth",
         method: "POST",
         data: { username, password },
       }),
-      invalidatesTags: ["Users"],
+      invalidatesTags: ["Users", "Likes"],
     }),
 
     getProfile: builder.query<{ userId: string; username: string }, {}>({
@@ -51,22 +37,12 @@ export const userEndpoints = baseApi.injectEndpoints({
       }),
       providesTags: ["Users"],
     }),
-
-    getUserId: builder.mutation<{ userId: string; username: string }, {}>({
-      query: () => ({
-        url: "profile",
-        method: "GET",
-        data: {},
-      }),
-    }),
   }),
 });
 
 export const {
-  useGetAllUsersQuery,
   usePostUserMutation,
   useGetUserByIdQuery,
   useGetUserMutation,
   useGetProfileQuery,
-  useGetUserIdMutation,
 } = userEndpoints;

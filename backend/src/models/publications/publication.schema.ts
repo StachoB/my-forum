@@ -1,23 +1,24 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document, DocumentSetOptions } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import { User } from '../users/user.schema';
 
 export type PublicationDocument = Publication & Document;
 
 @Schema()
-export class Publication extends mongoose.Document {
-    @Prop()
-    title: string;
+export class Publication {
+  [x: string]: any;
 
-    @Prop()
-    text: string;
+  @Prop()
+  title: string;
 
-    @Prop({ type: Date })
-    date: Date;
+  @Prop()
+  text: string;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users' })
-    user: User
+  @Prop({ type: Date })
+  date: Date;
 
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users' })
+  user: User;
 }
 
 export const PublicationsSchema = SchemaFactory.createForClass(Publication);

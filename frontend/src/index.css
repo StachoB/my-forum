@@ -24,6 +24,12 @@ body {
   padding: 10px;
   background-color: rgb(255, 255, 255, 0.7);
 }
+
+.commentForm{
+  text-align: left;
+  margin: 20px;
+  padding: 10px;
+}
 nav{
   background-color: #FFD1DC;
   cursor: pointer;
@@ -33,6 +39,12 @@ h1{
   font-size: 25px;
   font-weight: bold;
   margin: 20px;
+}
+
+h2{
+  font-size: 17px;
+  font-weight: bolder;
+  margin: 15px;
 }
 
 .containerFormItem{
@@ -105,8 +117,12 @@ a:hover{
   align-items: center;
 }
 
-.textBox{
+.textBoxPost{
   height:150px;
+}
+
+.textBoxComment{
+  height:120px;
 }
 
 .lighterText{
@@ -117,4 +133,24 @@ a:hover{
   background-color: rgb(58, 172, 58);
   border-width: 2px;
   border-color: rgb(58, 172, 58);
+}
+
+.userData{
+  color: rgb(58, 172, 58);
+  font-weight: bold;
+}
+
+.liked{
+  background-color:#FFD1DC;
+  border-width: 2px;
+  color: white;
+  border-color: #FFD1DC;
+  font-weight: bold;
+}
+
+.notLiked{
+  border-width: 2px;
+  color: rgb(58, 172, 58);
+  border-color: rgb(58, 172, 58);
+  font-weight: bold;
 }

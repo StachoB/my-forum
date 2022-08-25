@@ -11,13 +11,13 @@ import { UsersService } from './services/users.service';
 import { CommentSchema } from './models/comments/comment.schema';
 import { CommentsController } from './controllers/comments.controller';
 import { CommentsService } from './services/comments.service';
-import { AuthService } from './auth/auth.service';
-import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './auth/local.strategy';
-import { JwtService, JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './auth/constants';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { LikesController } from './controllers/likes.controller';
+import { LikesService } from './services/likes.service';
+import { LikeSchema } from './models/likes/like.schema';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -31,6 +31,7 @@ import { ConfigModule } from '@nestjs/config';
       { name: 'User', schema: UsersSchema },
       { name: 'Publication', schema: PublicationsSchema },
       { name: 'Comment', schema: CommentSchema },
+      { name: 'Like', schema: LikeSchema },
     ]),
   ],
   controllers: [
@@ -38,7 +39,14 @@ import { ConfigModule } from '@nestjs/config';
     PublicationsController,
     UsersController,
     CommentsController,
+    LikesController,
   ],
-  providers: [AppService, PublicationsService, UsersService, CommentsService],
+  providers: [
+    AppService,
+    PublicationsService,
+    UsersService,
+    CommentsService,
+    LikesService,
+  ],
 })
 export class AppModule {}

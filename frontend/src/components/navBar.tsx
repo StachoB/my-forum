@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import store, { useAppSelector } from "src/store";
+import { useAppSelector } from "src/store";
 
 function NavBar() {
   const access_token = useAppSelector((state) => state.user.access_token);

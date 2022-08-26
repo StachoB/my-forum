@@ -141,16 +141,17 @@ a:hover{
 }
 
 .liked{
-  background-color:#FFD1DC;
+  background-color:rgb(58, 172, 58);
   border-width: 2px;
   color: white;
-  border-color: #FFD1DC;
+  border-color: rgb(58, 172, 58);
   font-weight: bold;
 }
 
 .notLiked{
+  background-color: #FFD1DC;;
   border-width: 2px;
-  color: rgb(58, 172, 58);
-  border-color: rgb(58, 172, 58);
+  color: white;
+  border-color: #FFD1DC;
   font-weight: bold;
 }

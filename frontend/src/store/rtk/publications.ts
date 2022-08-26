@@ -54,7 +54,10 @@ export const publicationEndpoints = baseApi.injectEndpoints({
     }),
 
     //get the data for Pie Chart of analytics
-    getPieChartData: builder.query<(string | number)[][], void>({
+    getAllUsersNbPubli: builder.query<
+      { total_posts: number; _id: string }[],
+      void
+    >({
       query: () => ({
         url: "publications/analytics/pieChartData",
         method: "GET",
@@ -71,5 +74,5 @@ export const {
   useDeletePubliMutation,
   useGetNumberPubliUserQuery,
   useGetNumberPubliUserLastWeekQuery,
-  useGetPieChartDataQuery,
+  useGetAllUsersNbPubliQuery,
 } = publicationEndpoints;

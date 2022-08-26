@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Like } from 'src/models/likes/like.schema';
+import mongoose, { Model } from 'mongoose';
+import { Like, LikeDocument } from 'src/models/likes/like.schema';
 import { PublicationsService } from './publications.service';
 
 @Injectable()
@@ -10,8 +10,7 @@ export class LikesService {
 
   constructor(
     @InjectModel('Like')
-    private readonly likeModel: Model<Like>,
-    private readonly publicationService: PublicationsService,
+    private readonly likeModel: Model<LikeDocument>,
   ) {}
 
   async insertLike(post: string, user: string) {
@@ -32,15 +31,29 @@ export class LikesService {
   }
 
   async findTotalLikesUser(userId: string) {
-    const publications = await this.publicationService.findAllPubliUser(userId);
-    var totalLikes = 0;
-    await Promise.all(
-      publications.map(async (publi) => {
-        const number = await this.findLikesPubli(publi._id.toString());
-        totalLikes += number;
-      }),
-    );
-    return totalLikes;
+    let userIdObj = new mongoose.Types.ObjectId(userId);
+    let pipeline = [
+      {
+        $lookup: {
+          from: 'publications',
+          localField: 'post',
+          foreignField: '_id',
+          as: 'author',
+        },
+      },
+      {
+        $project: {
+          author: { $first: '$author.user' },
+        },
+      },
+      {
+        $match: {
+          author: userIdObj,
+        },
+      },
+    ];
+    const res = await this.likeModel.aggregate(pipeline).exec();
+    return res.length;
   }
 
   async findLikesPubli(post: string): Promise<number> {
@@ -63,35 +76,44 @@ export class LikesService {
   }
 
   async findTotalLikesUserLastWeek(userId: string) {
-    const publications = await this.publicationService.findAllPubliUser(userId);
-    var totalLikes = 0;
-    await Promise.all(
-      publications.map(async (publi) => {
-        const number = await this.findLikesPubliLastWeek(publi._id.toString());
-        totalLikes += number;
-      }),
-    );
-    return totalLikes;
-  }
-
-  async findLikesPubliLastWeek(post: string): Promise<number> {
-    const nbLike = await this.likeModel
-      .countDocuments({
-        post: post,
-        $expr: {
-          $gt: [
-            '$date',
-            {
-              $dateSubtract: {
-                startDate: '$$NOW',
-                unit: 'day',
-                amount: 7,
+    let userIdObj = new mongoose.Types.ObjectId(userId);
+    let pipeline = [
+      {
+        $match: {
+          $expr: {
+            $gt: [
+              '$date',
+              {
+                $dateSubtract: {
+                  startDate: '$$NOW',
+                  unit: 'day',
+                  amount: 7,
+                },
               },
-            },
-          ],
+            ],
+          },
         },
-      })
-      .exec();
-    return nbLike;
+      },
+      {
+        $lookup: {
+          from: 'publications',
+          localField: 'post',
+          foreignField: '_id',
+          as: 'author',
+        },
+      },
+      {
+        $project: {
+          author: { $first: '$author.user' },
+        },
+      },
+      {
+        $match: {
+          author: userIdObj,
+        },
+      },
+    ];
+    const totalLikesLastWeek = await this.likeModel.aggregate(pipeline).exec();
+    return totalLikesLastWeek.length;
   }
 }

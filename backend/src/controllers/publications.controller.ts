@@ -6,14 +6,11 @@ import {
   Param,
   Request,
   Post,
-  UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Public } from 'src/auth/public.guard';
 import { CreatePublicationDto } from 'src/dto/create-publication.dto';
 import { CommentsService } from 'src/services/comments.service';
 import { LikesService } from 'src/services/likes.service';
-import { UsersService } from 'src/services/users.service';
 import { PublicationsService } from '../services/publications.service';
 
 @Controller('publications')
@@ -21,7 +18,6 @@ export class PublicationsController {
   constructor(
     private publicationsService: PublicationsService,
     private commentService: CommentsService,
-    private usersService: UsersService,
     private likesService: LikesService,
   ) {}
 
@@ -37,13 +33,13 @@ export class PublicationsController {
   @Public()
   @Get(':id')
   async findOnePubli(@Param() params) {
-    return await this.publicationsService.findOne(params.id);
+    return this.publicationsService.findOne(params.id);
   }
 
   @Public()
   @Get()
   async findAllPubli() {
-    return await this.publicationsService.findAll();
+    return this.publicationsService.findAll();
   }
 
   @Delete(':pub_id')
@@ -60,18 +56,16 @@ export class PublicationsController {
 
   @Get('/analytics/pieChartData')
   async findPieChartData() {
-    return await this.publicationsService.findDataPieChart();
+    return this.publicationsService.findDataPieChart();
   }
 
   @Get('/analytics/nbPubli')
   async findNumberPubliUser(@Request() req) {
-    return await this.publicationsService.countUserPubli(req.user.userId);
+    return this.publicationsService.countUserPubli(req.user.userId);
   }
 
   @Get('/analytics/nbPubli/lastWeek')
   async findNumberPubliUserLastWeek(@Request() req) {
-    return await this.publicationsService.countUserPubliLastWeek(
-      req.user.userId,
-    );
+    return this.publicationsService.countUserPubliLastWeek(req.user.userId);
   }
 }

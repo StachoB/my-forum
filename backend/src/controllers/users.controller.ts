@@ -1,8 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { AuthService } from 'src/auth/auth.service';
 import { Public } from 'src/auth/public.guard';
 import { CreateUserDto } from 'src/dto/create-user.dto';
-import { User } from 'src/models/users/user.schema';
 import { UsersService } from '../services/users.service';
 
 @Controller('users')
@@ -52,6 +50,6 @@ export class UsersController {
   @Public()
   @Get('username/:username')
   async findOneUserWithUsername(@Param() params) {
-    return await this.usersService.findOneByUsername(params.username);
+    return this.usersService.findOneByUsername(params.username);
   }
 }

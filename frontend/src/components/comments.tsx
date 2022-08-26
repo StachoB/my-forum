@@ -1,5 +1,5 @@
 import React from "react";
-import store, { useAppSelector } from "src/store";
+import { useAppSelector } from "src/store";
 import { useGetUserByIdQuery } from "src/store/rtk/user";
 import { CommentType } from "src/types/commentType";
 import SuppressCom from "./supressComment";

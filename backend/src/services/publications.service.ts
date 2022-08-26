@@ -6,7 +6,6 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Publication } from '../models/publications/publication.schema';
 import { Model } from 'mongoose';
-import { UsersService } from './users.service';
 
 @Injectable()
 export class PublicationsService {
@@ -15,7 +14,6 @@ export class PublicationsService {
   constructor(
     @InjectModel('Publication')
     private readonly publicationModel: Model<Publication>,
-    private readonly userService: UsersService,
   ) {}
 
   async findAll() {
@@ -111,29 +109,15 @@ export class PublicationsService {
         },
       },
       {
-        $set: {
-          _id: { $arrayElemAt: ['$user', 0] },
+        $project: {
+          total_posts: 1,
+          _id: { $first: '$user.username' },
         },
-      },
-      {
-        $set: {
-          _id: '$_id.username',
-        },
-      },
-      {
-        $unset: 'user',
       },
     ];
     const usersPubli: { _id; total_posts }[] = await this.publicationModel
       .aggregate(pipeline)
       .exec();
-    let data: (string | number)[][] = [];
-    data.push(['User', 'Number of posts published']);
-    await Promise.all(
-      usersPubli.map(async (userPubli) => {
-        data.push(Object.values(userPubli));
-      }),
-    );
-    return data;
+    return usersPubli;
   }
 }

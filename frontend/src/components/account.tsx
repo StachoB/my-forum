@@ -1,4 +1,4 @@
-import store, { useAppDispatch } from "src/store";
+import store from "src/store";
 import { useGetProfileQuery } from "src/store/rtk/user";
 import { clearState } from "src/store/slices/user";
 import NavBar from "./navBar";

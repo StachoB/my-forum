@@ -5,10 +5,8 @@ import {
   Get,
   Param,
   Post,
-  UseGuards,
   Request,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Public } from 'src/auth/public.guard';
 import { CreateCommentDto } from 'src/dto/create-comment.dto';
 import { CommentsService } from '../services/comments.service';
@@ -29,13 +27,13 @@ export class CommentsController {
   @Public()
   @Get()
   async findAllComs() {
-    return await this.commentsService.findAll();
+    return this.commentsService.findAll();
   }
 
   @Public()
   @Get(':postId')
   async findComsPubli(@Param() params) {
-    return await this.commentsService.findComsPubli(params.postId);
+    return this.commentsService.findComsPubli(params.postId);
   }
 
   @Delete(':comId')

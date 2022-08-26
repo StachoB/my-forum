@@ -2,7 +2,6 @@ import axios, { AxiosInstance } from "axios";
 import history from "../lib/history";
 import { clearState } from "src/store/slices/user";
 import store from "../store";
-import { useDispatch } from "react-redux";
 
 const api: AxiosInstance = axios.create({
   baseURL: "http://localhost:3000",

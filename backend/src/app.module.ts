@@ -24,9 +24,7 @@ import { APP_GUARD } from '@nestjs/core';
     ConfigModule.forRoot({ isGlobal: true }),
 
     AuthModule,
-    MongooseModule.forRoot(
-      'mongodb+srv://barbaraStachowicz:Cmdmad123@moncluster.qq6yauh.mongodb.net/Forum?retryWrites=true&w=majority',
-    ),
+    MongooseModule.forRoot(process.env.MONGODB_BDD),
     MongooseModule.forFeature([
       { name: 'User', schema: UsersSchema },
       { name: 'Publication', schema: PublicationsSchema },

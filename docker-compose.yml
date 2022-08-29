@@ -1,0 +1,18 @@
+version: "3"
+services:
+  backend:
+    container_name: backend
+    environment:
+      - MONGODB_BDD:"mongodb+srv://barbaraStachowicz:Cmdmad123@moncluster.qq6yauh.mongodb.net/Forum?retryWrites=true&w=majority"
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile.prod
+    ports:
+      - "5000:80"

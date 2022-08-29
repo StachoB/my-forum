@@ -4,7 +4,7 @@ import { clearState } from "src/store/slices/user";
 import store from "../store";
 
 const api: AxiosInstance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
 api.interceptors.request.use(

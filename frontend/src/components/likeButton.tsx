@@ -1,11 +1,14 @@
 import {
   useGetIsPubliLikedQuery,
+  useGetNumberLikesPubliQuery,
   usePostLikeMutation,
 } from "src/store/rtk/likes";
 
 function LikeButton(props: { publi_id: string }) {
   const [postLike] = usePostLikeMutation();
-
+  const { data: nbLikes } = useGetNumberLikesPubliQuery({
+    publiId: props.publi_id,
+  });
   const { data: isLiked } = useGetIsPubliLikedQuery({
     publiId: props.publi_id,
   });
@@ -15,12 +18,15 @@ function LikeButton(props: { publi_id: string }) {
   }
 
   return (
-    <button
-      className={`btn ${isLiked ? "liked" : "notLiked"}`}
-      onClick={AddLike}
-    >
-      {isLiked ? "Liked" : "Like"}
-    </button>
+    <div className="likes">
+      {nbLikes} Likes
+      <button
+        className={`btn ${isLiked ? "liked" : "notLiked"} likeBtn`}
+        onClick={AddLike}
+      >
+        {isLiked ? "Liked" : "Like"}
+      </button>
+    </div>
   );
 }
 

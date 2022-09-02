@@ -36,6 +36,42 @@ export const commentsEndpoints = baseApi.injectEndpoints({
         method: "GET",
         data: {},
       }),
+      async onCacheEntryAdded(
+        arg,
+        { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
+      ) {
+        const eventSourceComments = new EventSource(
+          `http://localhost:3000/sse/commentevents/${arg.publiId}`
+        );
+        try {
+          await cacheDataLoaded;
+          eventSourceComments.onmessage = ({ data }) => {
+            let eventData = JSON.parse(data);
+            if (
+              eventData.hasOwnProperty("insertedComment") &&
+              eventData.insertedComment.post === arg.publiId
+            ) {
+              updateCachedData((draft) => {
+                draft.push(eventData.insertedComment);
+              });
+            } else if (
+              eventData.hasOwnProperty("deletedComment") &&
+              eventData.deletedComment.post === arg.publiId
+            ) {
+              updateCachedData((draft) => {
+                var elementIndex = draft
+                  .map(function (x) {
+                    return x._id;
+                  })
+                  .indexOf(eventData.deletedComment._id);
+                draft.splice(elementIndex, 1);
+              });
+            }
+          };
+        } catch {}
+        await cacheEntryRemoved;
+        eventSourceComments.close();
+      },
       providesTags: ["Comments"],
     }),
   }),

@@ -19,7 +19,7 @@ export class CommentsService {
       post: post,
     });
     this.comments.push(newComment);
-    await newComment.save();
+    return await newComment.save();
   }
 
   async findAll() {
@@ -43,6 +43,7 @@ export class CommentsService {
       throw new UnauthorizedException('Unauthorized');
     } else {
       await this.commentModel.deleteOne({ _id: comId }).exec();
+      return comment[0];
     }
   }
 }

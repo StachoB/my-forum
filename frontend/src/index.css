@@ -155,3 +155,12 @@ a:hover{
   border-color: #FFD1DC;
   font-weight: bold;
 }
+.likes{
+  font-weight: bold;
+  color: rgb(58, 172, 58);
+  margin: 20px;
+}
+
+.likeBtn{
+  float: right;
+}

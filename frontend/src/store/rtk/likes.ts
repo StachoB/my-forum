@@ -13,17 +13,48 @@ export const likesEndpoints = baseApi.injectEndpoints({
     }),
 
     //get total of likes of one publication
-    getNumberLikesPubli: builder.query<
-      {
-        numLikes: number;
-      },
-      { publiId: string }
-    >({
+    getNumberLikesPubli: builder.query<number, { publiId: string }>({
       query: ({ publiId }) => ({
         url: `/likes/${publiId}`,
         method: "GET",
         data: { publiId },
       }),
+      async onCacheEntryAdded(
+        arg,
+        { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
+      ) {
+        const eventSourceLikes = new EventSource(
+          `http://localhost:3000/sse/likeevents/${arg.publiId}`
+        );
+        try {
+          await cacheDataLoaded;
+          eventSourceLikes.onmessage = ({ data }) => {
+            let eventData = JSON.parse(data);
+            console.log(eventData);
+            if (
+              eventData.hasOwnProperty("insertedLike") &&
+              eventData.insertedLike.post === arg.publiId
+            ) {
+              updateCachedData((draft) => {
+                console.log("entered added", draft);
+                draft++;
+                console.log(draft);
+              });
+            } else if (
+              eventData.hasOwnProperty("deletedLike") &&
+              eventData.deletedLike.post === arg.publiId
+            ) {
+              updateCachedData((draft) => {
+                console.log("entered suppressed", draft);
+                draft--;
+                console.log(draft);
+              });
+            }
+          };
+        } catch {}
+        await cacheEntryRemoved;
+        eventSourceLikes.close();
+      },
       providesTags: ["Likes"],
     }),
 
@@ -34,6 +65,7 @@ export const likesEndpoints = baseApi.injectEndpoints({
         method: "GET",
         data: { publiId },
       }),
+
       providesTags: ["Likes"],
     }),
 

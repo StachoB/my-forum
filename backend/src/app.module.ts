@@ -18,6 +18,8 @@ import { LikesService } from './services/likes.service';
 import { LikeSchema } from './models/likes/like.schema';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { SseController } from './controllers/sse.controller';
+import { EventsService } from './services/events.service';
 
 @Module({
   imports: [
@@ -38,6 +40,7 @@ import { APP_GUARD } from '@nestjs/core';
     UsersController,
     CommentsController,
     LikesController,
+    SseController,
   ],
   providers: [
     AppService,
@@ -45,6 +48,7 @@ import { APP_GUARD } from '@nestjs/core';
     UsersService,
     CommentsService,
     LikesService,
+    EventsService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

@@ -10,6 +10,36 @@ export const publicationEndpoints = baseApi.injectEndpoints({
         method: "GET",
         data: {},
       }),
+      async onCacheEntryAdded(
+        arg,
+        { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
+      ) {
+        const eventSourcePublications = new EventSource(
+          "http://localhost:3000/sse/events"
+        );
+        try {
+          await cacheDataLoaded;
+          eventSourcePublications.onmessage = ({ data }) => {
+            let eventData = JSON.parse(data);
+            if (eventData.hasOwnProperty("insertedPubli")) {
+              updateCachedData((draft) => {
+                draft.unshift(eventData.insertedPubli);
+              });
+            } else if (eventData.hasOwnProperty("deletedPubli")) {
+              updateCachedData((draft) => {
+                var elementIndex = draft
+                  .map(function (x) {
+                    return x._id;
+                  })
+                  .indexOf(eventData.deletedPubli);
+                draft.splice(elementIndex, 1);
+              });
+            }
+          };
+        } catch {}
+        await cacheEntryRemoved;
+        eventSourcePublications.close();
+      },
       providesTags: ["Posts"],
     }),
 

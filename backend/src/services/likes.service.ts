@@ -14,16 +14,16 @@ export class LikesService {
   ) {}
 
   async insertLike(post: string, user: string) {
-    const newLike = new this.likeModel({
+    const newLike = await new this.likeModel({
       post: post,
       user: user,
       date: Date.now(),
     });
-    await newLike.save();
+    return await newLike.save();
   }
 
   async deleteLike(post: string, user: string) {
-    await this.likeModel.deleteOne({ post: post, user: user }).exec();
+    return await this.likeModel.deleteOne({ post: post, user: user }).exec();
   }
 
   async deleteLikesPubli(publiId: string) {
@@ -73,6 +73,16 @@ export class LikesService {
       })
       .exec();
     return nbLike == 0 ? false : true;
+  }
+
+  async findLike(post: string, user: string) {
+    const like = await this.likeModel
+      .findOne({
+        post: post,
+        user: user,
+      })
+      .exec();
+    return like;
   }
 
   async findTotalLikesUserLastWeek(userId: string) {

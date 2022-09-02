@@ -47,7 +47,7 @@ export class PublicationsService {
       date: Date.now(),
       user: user,
     });
-    await newPublication.save();
+    return await newPublication.save();
   }
 
   async deleteOnePubli(id: string, userId: string) {

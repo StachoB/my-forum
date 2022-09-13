@@ -53,6 +53,7 @@ export const commentsEndpoints = baseApi.injectEndpoints({
             ) {
               updateCachedData((draft) => {
                 draft.push(eventData.insertedComment);
+                return draft;
               });
             } else if (
               eventData.hasOwnProperty("deletedComment") &&
@@ -65,6 +66,7 @@ export const commentsEndpoints = baseApi.injectEndpoints({
                   })
                   .indexOf(eventData.deletedComment._id);
                 draft.splice(elementIndex, 1);
+                return draft;
               });
             }
           };

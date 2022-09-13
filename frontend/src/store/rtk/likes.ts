@@ -1,4 +1,5 @@
 import { baseApi } from "./base";
+import io from "socket.io-client";
 
 export const likesEndpoints = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -23,37 +24,32 @@ export const likesEndpoints = baseApi.injectEndpoints({
         arg,
         { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
       ) {
-        const eventSourceLikes = new EventSource(
-          `http://localhost:3000/sse/likeevents/${arg.publiId}`
-        );
+        const socket = io("http://localhost:3000");
         try {
           await cacheDataLoaded;
-          eventSourceLikes.onmessage = ({ data }) => {
-            let eventData = JSON.parse(data);
-            console.log(eventData);
+          socket.on("events", function (data) {
+            console.log("premier cas", data);
             if (
-              eventData.hasOwnProperty("insertedLike") &&
-              eventData.insertedLike.post === arg.publiId
+              data.hasOwnProperty("insertedLike") &&
+              data.insertedLike.postId === arg.publiId
             ) {
               updateCachedData((draft) => {
-                console.log("entered added", draft);
                 draft++;
-                console.log(draft);
+                return draft;
               });
             } else if (
-              eventData.hasOwnProperty("deletedLike") &&
-              eventData.deletedLike.post === arg.publiId
+              data.hasOwnProperty("deletedLike") &&
+              data.deletedLike.postId === arg.publiId
             ) {
               updateCachedData((draft) => {
-                console.log("entered suppressed", draft);
                 draft--;
-                console.log(draft);
+                return draft;
               });
             }
-          };
+          });
         } catch {}
         await cacheEntryRemoved;
-        eventSourceLikes.close();
+        socket.close();
       },
       providesTags: ["Likes"],
     }),
@@ -70,11 +66,11 @@ export const likesEndpoints = baseApi.injectEndpoints({
     }),
 
     //get total of likes of current user
-    getTotalLikes: builder.query<number, void>({
-      query: () => ({
+    getTotalLikes: builder.query<number, { userId: string | undefined }>({
+      query: ({ userId }) => ({
         url: "likes/numberLikes/total",
         method: "GET",
-        data: {},
+        data: { userId },
       }),
       providesTags: ["Likes"],
     }),

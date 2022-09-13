@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { Public } from 'src/auth/public.guard';
 import { CreatePublicationDto } from 'src/dto/create-publication.dto';
+import { EventsGateway } from 'src/gateway/events.gateway';
 import { CommentsService } from 'src/services/comments.service';
 import { EventsService } from 'src/services/events.service';
 import { LikesService } from 'src/services/likes.service';
@@ -21,6 +22,7 @@ export class PublicationsController {
     private commentService: CommentsService,
     private likesService: LikesService,
     private eventsService: EventsService,
+    private gateway: EventsGateway,
   ) {}
 
   @Post()

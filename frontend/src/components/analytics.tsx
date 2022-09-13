@@ -6,12 +6,14 @@ import {
   useGetNumberPubliUserLastWeekQuery,
   useGetNumberPubliUserQuery,
 } from "src/store/rtk/publications";
+import { useGetUserIdQuery } from "src/store/rtk/user";
 import NavBar from "./navBar";
 import PieChart from "./pieChart";
 
 function Analytics() {
+  const { data: userId } = useGetUserIdQuery();
   const { data: nbPubli } = useGetNumberPubliUserQuery();
-  const { data: totalLikes } = useGetTotalLikesQuery();
+  const { data: totalLikes } = useGetTotalLikesQuery({ userId: userId });
   const { data: nbPubliLastWeek } = useGetNumberPubliUserLastWeekQuery();
   const { data: totalLikesLastWeek } = useGetLastWeekLikesQuery();
   return (

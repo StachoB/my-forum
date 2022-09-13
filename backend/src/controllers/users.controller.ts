@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Request } from '@nestjs/common';
 import { Public } from 'src/auth/public.guard';
 import { CreateUserDto } from 'src/dto/create-user.dto';
 import { UsersService } from '../services/users.service';
@@ -39,6 +39,11 @@ export class UsersController {
       createUserDto.password,
     );
     return found;
+  }
+
+  @Get('userId')
+  async finduserId(@Request() req) {
+    return req.user.userId;
   }
 
   @Public()

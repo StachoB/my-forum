@@ -13,6 +13,15 @@ export const userEndpoints = baseApi.injectEndpoints({
       }
     ),
 
+    //get id of current user
+    getUserId: builder.query<string, void>({
+      query: () => ({
+        url: `users/userId`,
+        method: "GET",
+        data: {},
+      }),
+    }),
+
     //get username from id of user
     getUserById: builder.query<string, { userId: string }>({
       query: ({ userId }) => ({
@@ -49,4 +58,5 @@ export const {
   useGetUserByIdQuery,
   useGetUserMutation,
   useGetProfileQuery,
+  useGetUserIdQuery,
 } = userEndpoints;

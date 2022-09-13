@@ -1,5 +1,6 @@
 import { PubliType } from "src/types/publiType";
 import { baseApi } from "./base";
+import io from "socket.io-client";
 
 export const publicationEndpoints = baseApi.injectEndpoints({
   endpoints: (builder) => ({

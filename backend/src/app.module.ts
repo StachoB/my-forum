@@ -20,6 +20,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { SseController } from './controllers/sse.controller';
 import { EventsService } from './services/events.service';
+import { EventsGateway } from './gateway/events.gateway';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { EventsService } from './services/events.service';
     CommentsService,
     LikesService,
     EventsService,
+    EventsGateway,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
